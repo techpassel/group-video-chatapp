@@ -7,7 +7,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@font-face {
+  font-family: "HyliaSerif";
+  /*Can be any text*/
+  src: local("HyliaSerifBeta-Regular"),
+    url("./fonts/HyliaSerifBeta-Regular.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "VeganStyle";
+  /*Can be any text*/
+  src: local("VeganStylePersonalUse-5y58"),
+    url("./fonts/VeganStylePersonalUse-5Y58.ttf") format("truetype");
 }

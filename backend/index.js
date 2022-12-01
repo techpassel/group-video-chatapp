@@ -48,16 +48,35 @@ const io = new Server(server, {
 let peers = [];
 let groupCallRooms = [];
 
-const broadcastEventTypes = {
+const BroadcastEventTypes = {
     ACTIVE_USERS: 'ACTIVE_USERS',
     GROUP_CALL_ROOMS: 'GROUP_CALL_ROOMS'
 };
 
 io.on('connection', (socket) => {
-    socket.on('')
+    //Following code will be executed as soon as connection is established.
+    console.log(`Request coming ${socket.id}`);
+    socket.emit('connection', socket.id);
+
+    socket.on('register-user', (data) => {
+        if (data.username && data.socketId && data.username != "") {
+            peers = peers.filter(p => p.username != data.username);
+            peers.push(data);
+
+            //To send the user list of already existing users when he is registered. It includes him also.
+            io.sockets.emit('broadcast', {
+                event: BroadcastEventTypes.ACTIVE_USERS,
+                activeUsers: peers
+            });
+
+            //To send the user list of already existing groups when he is registered.
+            io.sockets.emit('broadcast', {
+                event: BroadcastEventTypes.GROUP_CALL_ROOMS,
+                groupCallRooms
+            });
+        }
+    });
 })
-
-
 
 // Starting express server
 server.listen(

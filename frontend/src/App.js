@@ -2,8 +2,9 @@ import Auth from './components/auth/Auth';
 import Home from './components/home/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+
 // Syntax for Link
-{/* <Link to="/">Home</Link> */}
+{/* <Link to="/">Home</Link> */ }
 
 function App() {
   return (

@@ -1,11 +1,18 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { FaHollyBerry } from 'react-icons/fa'
 import './Auth.scss'
+import { useNavigate } from "react-router-dom"
+import { SocketContext } from '../../contexts/SocketContext'
+
 const Auth = () => {
-    const [username, setUsername] = useState('');
+    const { username, setUsername } = useContext(SocketContext);
+    const navigate = useNavigate();
     const submitHandler = () => {
-        console.log('submit pressed');
+        if (username != "") {
+            navigate('/home');
+        }
     }
+
     return (
         <div className='container'>
             <div className='innerContainer'>

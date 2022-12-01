@@ -1,6 +1,7 @@
 .container {
     height: 100vh;
-    background-color: aqua;
+    background: rgb(3, 0, 69);
+    background: linear-gradient(90deg, rgba(3, 0, 69, 1) 0%, rgba(0, 131, 255, 1) 50%, rgba(3, 0, 69, 1) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,7 +9,8 @@
 
 .innerContainer {
     padding: 40px 50px;
-    background-color: bisque;
+    background: rgba(219, 2, 2, 1);
+    background: linear-gradient(90deg, rgba(219, 2, 2, 1) 0%, rgba(255, 0, 0, 1) 50%, rgba(219, 2, 2, 1) 100%);
     border-radius: 20px;
 }
 
@@ -21,7 +23,10 @@
 
 .icon {
     font-size: 45px;
-    color: green;
+    color: #FF0000;
+    background-color: black;
+    padding: 10px;
+    border-radius: 50%;
 }
 
 .iconWrapper {
@@ -34,7 +39,7 @@
     padding-bottom: 50px;
     font-size: 40px;
     font-weight: 500;
-    color: red;
+    color: black;
 }
 
 .input {
@@ -49,10 +54,10 @@
 .button {
     font-size: 18px;
     font-weight: 700;
-    background-color: #fc9300;
+    background-color: rgba(2, 0, 36, 1);
     padding: 10px 40px;
     width: max-content;
-    border: none;
-    border-radius: 20px;
+    border: 3px solid white;
+    border-radius: 10px;
     color: white;
 }

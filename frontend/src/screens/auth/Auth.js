@@ -8,13 +8,13 @@ const Auth = () => {
     const { username, setUsername } = useContext(SocketContext);
     const navigate = useNavigate();
     const submitHandler = () => {
-        if (username != "") {
+        if (username !== "") {
             navigate('/home');
         }
     }
 
     return (
-        <div className='container'>
+        <div className='authContainer'>
             <div className='innerContainer'>
                 <div className='iconWrapper'>
                     <FaHollyBerry className='icon' /><span className='abc'>EnnaMeet</span>
@@ -27,7 +27,7 @@ const Auth = () => {
                         className="input"
                         onChange={(event) => setUsername(event.target.value)}
                     />
-                    <button onClick={submitHandler} className="button">Start</button>
+                    <button onClick={submitHandler} className="startButton">Start</button>
                 </div>
             </div>
         </div>

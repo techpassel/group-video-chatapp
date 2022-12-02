@@ -1,5 +1,5 @@
-import Auth from './components/auth/Auth';
-import Home from './components/home/Home';
+import Auth from './screens/auth/Auth';
+import Home from './screens/home/Home';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 

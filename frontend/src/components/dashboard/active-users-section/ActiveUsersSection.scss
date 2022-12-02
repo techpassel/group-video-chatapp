@@ -1,0 +1,38 @@
+.ausContainer {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.userAtiveWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 5px;
+    border-radius: 20px;
+}
+
+.userWrapper {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.avatar {
+    font-size: 40px;
+    color: rgba(219, 2, 2, 1);
+}
+
+
+.activeUserCheck {
+    margin-right: 5px;
+    background-color: #20ad00;
+    padding: 5px;
+    border-radius: 50%;
+    color: white;
+}

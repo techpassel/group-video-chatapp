@@ -1,0 +1,129 @@
+.acsContainer {
+    // padding: 10px 0px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.messageArea {
+    flex: 6;
+    overflow-y: auto;
+}
+
+.formArea {
+    flex: 1;
+    height: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
+
+.messageContainer {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 10px;
+}
+
+.selfMessageContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5px;
+    align-items: center;
+    padding: 10px;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50px;
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.userAvatar {
+    font-size: 40px;
+    color: rgba(219, 2, 2, 1);
+}
+
+.selfUserAvatar {
+    font-size: 40px;
+    color: #20ad00;
+}
+
+.messageWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.userName {
+    text-align: center;
+}
+
+.selfUserName {
+    text-align: center;
+    color: #7e827d;
+}
+
+.message {
+    padding: 10px 15px;
+    background-color: white;
+    border-radius: 20px;
+    border-top-left-radius: 0px;
+}
+
+.selfMessage {
+    padding: 10px 15px;
+    background-color: #7e827d;
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+}
+
+.messageDate {
+    font-size: 10px;
+    padding-left: 15px;
+    font-weight: 600;
+    color: white;
+}
+
+.selfMessageDate {
+    font-size: 10px;
+    display: flex;
+    flex-direction: row-reverse;
+    padding-right: 15px;
+    font-weight: 600;
+    color: #7e827d;
+}
+
+.chatInput {
+    font-size: 14px;
+    width: 90%;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 20px;
+}
+
+@media only screen and (max-width: 1024px) {
+    .messageArea {
+        flex: 5;
+    }
+
+    .chatInput {
+        width: 85%;
+    }
+}
+
+@media only screen and (max-width: 786px) {
+    .messageArea {
+        flex: 4;
+    }
+
+    .chatInput {
+        width: 80%;
+    }
+}

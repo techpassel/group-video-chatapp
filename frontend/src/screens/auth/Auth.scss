@@ -1,4 +1,4 @@
-.container {
+.authContainer {
     height: 100vh;
     background: rgb(3, 0, 69);
     background: linear-gradient(90deg, rgba(3, 0, 69, 1) 0%, rgba(0, 131, 255, 1) 50%, rgba(3, 0, 69, 1) 100%);
@@ -51,11 +51,12 @@
     font-size: 18px;
 }
 
-.button {
-    font-size: 18px;
+.startButton {
+    font-size: 20px;
+    letter-spacing: 1px;
     font-weight: 700;
-    background-color: rgba(3, 0, 69, 1);
-    padding: 10px 40px;
+    background-color: #20ad00;
+    padding: 8px 40px;
     width: max-content;
     border: 3px solid white;
     border-radius: 10px;

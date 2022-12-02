@@ -72,7 +72,7 @@ const WebRTCContextProvider = ({ children }) => {
         for (const track of localStream.getTracks()) {
             peerConnection.addTrack(track, localStream);
         }
-        /*
+
         peerConnection.oniceconnectionstatechange = (ev) => console.log("111111111111", ev);
 
         peerConnection.onconnectionstatechange = (ev) => console.log("222222222", ev);
@@ -82,26 +82,30 @@ const WebRTCContextProvider = ({ children }) => {
             console.log(val)
             console.log("****************************");
         })
-        */
+
         //Creating Data Channel
         dataChannel = peerConnection.createDataChannel('chat');
 
         //It will be triggered as soon as datachannel is open
         dataChannel.onopen = () => {
-            console.log('chat data channel succesfully opened');
+            console.log('Chat data channel succesfully opened');
         };
 
-        // Incoming data channel messages
+        //Incoming data channel messages
         peerConnection.ondatachannel = (event) => {
             const dataChannel = event.channel;
 
             dataChannel.onopen = () => {
-                console.log('peer connection is ready to receive data channel messages');
+                console.log('Peer connection is ready to receive data channel messages');
             };
 
             dataChannel.onmessage = (event) => {
-                console.log(event.data);
+                console.log("Getting data channel message", event.data);
             };
+        };
+
+        peerConnection.onicecandidate = (event) => {
+            console.log('Geeting candidates from stun server', event.candidate);
         };
     }
 

@@ -16,7 +16,7 @@ const Home = () => {
   }, [])
 
   return (
-    <div className='container'>
+    <div className='homeContainer'>
       <div className='videoChatGroupsWrapper'>
         <div className='videoContainer'>
           <VideoSection />

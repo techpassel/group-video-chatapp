@@ -17,13 +17,13 @@
 
 .sectionHeaderTitle {
     color: white;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 700;
 }
 
 .createGroupButton {
-    padding: 10px 20px;
-    font-size: 18px;
+    padding: 6px 20px;
+    font-size: 16px;
     font-weight: bold;
     border-radius: 5px;
     color: white;
@@ -45,24 +45,85 @@
 }
 
 .groupItemName {
-    max-width: 160px;   //We left 20px both side for padding.
-    max-height: 60px;
+    max-width: 160px; //We left 20px both side for padding.
+    max-height: 90px;
     width: max-content;
     background-color: rgba(219, 2, 2, 1);
     border: 3px solid white;
     color: white;
-    font-weight: 700;
-    border-radius: 15px;
-    padding: 10px 20px;
+    border-radius: 10px;
+    padding: 6px 10px;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
+    font-family: 'Ubuntu';
 }
 
 .activeGroupCheck {
     background-color: #20ad00;
     padding: 5px;
+    font-size: 20px;
     border-radius: 50%;
     color: white;
     position: absolute;
     top: -7px;
     left: -7px;
+}
+
+.modalTitle {
+    color: black;
+}
+
+.modalBody {
+    color: black;
+}
+
+.modalFooter {
+    display: flex;
+    gap: 10px;
+}
+
+.modalCloseBtn {
+    background-color: rgba(219, 2, 2, 1);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 6px 15px;
+    border-radius: 8px;
+    box-shadow: rgba(219, 2, 2, 0.24) 0px 3px 8px;
+}
+
+.modalSaveBtn {
+    background-color: rgba(3, 0, 69, 1);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 6px 15px;
+    border-radius: 8px;
+    box-shadow: rgba(3, 0, 69, 0.24) 0px 3px 8px;
+}
+
+.groupNameWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.groupNameInput {
+    width: 320px;
+    padding-left: 5px;
+}
+
+@media only screen and (max-width: 786px) {
+    .sectionHeaderTitle {
+        font-size: 16px;
+        line-height: 20px;
+    }
+
+    .createGroupButton {
+        padding: 6px 12px;
+        font-size: 14px;
+        line-height: 18px;
+    }
 }

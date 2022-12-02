@@ -20,19 +20,20 @@
     justify-content: flex-start;
     align-items: center;
     gap: 5px;
-    font-size: 18px;
+    color: black;
+    font-size: 16px;
     font-weight: bold;
 }
 
 .avatar {
-    font-size: 40px;
+    font-size: 35px;
     color: rgba(219, 2, 2, 1);
 }
-
 
 .activeUserCheck {
     margin-right: 5px;
     background-color: #20ad00;
+    font-size: 20px;
     padding: 5px;
     border-radius: 50%;
     color: white;

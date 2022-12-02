@@ -40,8 +40,10 @@
     align-items: center;
     width: 50px;
     color: white;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
+    line-height: 16px;
+    font-family: 'Ubuntu';
 }
 
 .userAvatar {
@@ -57,7 +59,7 @@
 .messageWrapper {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
 }
 
 .userName {
@@ -72,32 +74,42 @@
 
 .message {
     padding: 10px 15px;
+    color: black;
+    font-weight: 400;
     background-color: #dbd5d5;
     border-radius: 20px;
     border-top-left-radius: 0px;
+    font-family: 'Ubuntu';
+    font-size: 15px;
 }
 
 .selfMessage {
     padding: 10px 15px;
+    color: black;
+    font-weight: 400;
     background-color: #7e827d;
     border-radius: 20px;
     border-top-right-radius: 0px;
+    font-family: 'Ubuntu';
+    font-size: 15px;
 }
 
 .messageDate {
-    font-size: 10px;
+    font-size: 11px;
     padding-left: 15px;
-    font-weight: 600;
+    font-weight: 500;
     color: black;
+    font-family: 'Ubuntu';
 }
 
 .selfMessageDate {
-    font-size: 10px;
+    font-size: 11px;
     display: flex;
     flex-direction: row-reverse;
     padding-right: 15px;
-    font-weight: 600;
+    font-weight: 500;
     color: black;
+    font-family: 'Ubuntu';
 }
 
 .chatInput {
@@ -107,6 +119,7 @@
     border: none;
     outline: none;
     border-radius: 20px;
+    font-family: 'Ubuntu';
 }
 
 @media only screen and (max-width: 1024px) {

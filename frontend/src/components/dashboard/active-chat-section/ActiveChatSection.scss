@@ -8,6 +8,7 @@
 .messageArea {
     flex: 6;
     overflow-y: auto;
+    background-color: white;
 }
 
 .formArea {
@@ -16,7 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
 }
 
 .messageContainer {
@@ -40,18 +40,18 @@
     align-items: center;
     width: 50px;
     color: white;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 500;
 }
 
 .userAvatar {
     font-size: 40px;
-    color: rgba(219, 2, 2, 1);
+    color: #20ad00;
 }
 
 .selfUserAvatar {
     font-size: 40px;
-    color: #20ad00;
+    color: rgba(219, 2, 2, 1);
 }
 
 .messageWrapper {
@@ -62,16 +62,17 @@
 
 .userName {
     text-align: center;
+    color: black;
 }
 
 .selfUserName {
     text-align: center;
-    color: #7e827d;
+    color: black;
 }
 
 .message {
     padding: 10px 15px;
-    background-color: white;
+    background-color: #dbd5d5;
     border-radius: 20px;
     border-top-left-radius: 0px;
 }
@@ -87,7 +88,7 @@
     font-size: 10px;
     padding-left: 15px;
     font-weight: 600;
-    color: white;
+    color: black;
 }
 
 .selfMessageDate {
@@ -96,7 +97,7 @@
     flex-direction: row-reverse;
     padding-right: 15px;
     font-weight: 600;
-    color: #7e827d;
+    color: black;
 }
 
 .chatInput {

@@ -17,7 +17,8 @@ const Auth = () => {
         <div className='authContainer'>
             <div className='innerContainer'>
                 <div className='iconWrapper'>
-                    <FaHollyBerry className='icon' /><span className='abc'>EnnaMeet</span>
+                    <FaHollyBerry className='icon' />
+                    <span className='abc'>EnnaMeet</span>
                 </div>
                 <div className='inputWrapper'>
                     <input

@@ -1,9 +1,11 @@
-import { CallStates } from "../enums";
-import { setCallState, setLocalStream, setMessage, setRemoteStream } from "../store/actions/callAction";
+import { CallStates, PreOfferAnswers } from "../enums";
+import { resetCallDataState, setCallingDialogVisible, setCallState, setLocalStream, setMessage, setRemoteStream } from "../store/actions/callAction";
 import { store } from "../store/store";
+import { sendPreOffer, sendPreOfferAnswer, sendWebRTCAnswer, sendWebRTCCandidate, sendWebRTCOffer } from './SocketUtil'
 
 /*
     Role of STUN and TURN servers in WebRTC :-
+    ------------------------------------------------------------------------------------------------------------------------
     WebRTC connects users by transferring real-time audio, video and data from device to device using P2P communications. 
     In situations where users are on different Internet Protocol (IP) networks that have Network Address Translation (NAT) 
     firewalls that prevent RTC, WebRTC can be used in conjunction with Session Traversal Utilities for NAT (STUN) servers. 
@@ -12,16 +14,18 @@ import { store } from "../store/store";
     But there are also networks that are so restrictive that even a STUN server cannot be used to translate IP addresses. 
     In these cases, WebRTC is used with a Traversal Using Relays around NAT (TURN) server, which relays traffic between 
     users, enabling them to connect. The Interactive Connectivity Establishment protocol is used to find the best connection.
+    ------------------------------------------------------------------------------------------------------------------------
 
-
-    For details about WebRTC check following documentations :
+    For details about WebRTC check the following documentations :
     https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
-    https://www.techtarget.com/searchunifiedcommunications/definition/WebRTC-Web-Real-Time-Communications
 
 
-
-    For details about RTCPeerConnection check following documentation :
+    For details about RTCPeerConnection check the following documentation :
     https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
+
+
+    For details about RTCDataChannel check the following documentation :
+    https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
 */
 
 const defaultConstrains = {
@@ -76,6 +80,8 @@ const createPeerConnection = () => {
         peerConnection.addTrack(track, localStream);
     }
 
+    console.log(peerConnection.iceConnectionState);
+
     peerConnection.ontrack = ({ streams: [stream] }) => {
         console.log(stream);
         store.dispatch(setRemoteStream(stream));
@@ -104,12 +110,12 @@ const createPeerConnection = () => {
 
     peerConnection.onicecandidate = (event) => {
         console.log('Geeting candidates from stun server', event.candidate);
-        // if (event.candidate) {
-        //     wss.sendWebRTCCandidate({
-        //         candidate: event.candidate,
-        //         connectedUserSocketId: connectedUserSocketId
-        //     });
-        // }
+        if (event.candidate) {
+            sendWebRTCCandidate({
+                candidate: event.candidate,
+                connectedUserSocketId: connectedUserSocketId
+            });
+        }
     };
 
     peerConnection.onconnectionstatechange = (event) => {
@@ -118,4 +124,119 @@ const createPeerConnection = () => {
             console.log('Succesfully connected with other peer');
         }
     };
+};
+
+export const handlePreOffer = (data) => {
+    if (checkIfCallIsPossible()) {
+        connectedUserSocketId = data.callerSocketId;
+        store.dispatch(setCallerUsername(data.callerUsername));
+        store.dispatch(setCallState(CallStates.CALL_REQUESTED));
+    } else {
+        sendPreOfferAnswer({
+            callerSocketId: data.callerSocketId,
+            answer: PreOfferAnswers.CALL_NOT_AVAILABLE
+        });
+    }
+};
+
+export const handlePreOfferAnswer = (data) => {
+    store.dispatch(setCallingDialogVisible(false));
+
+    if (data.answer === PreOfferAnswers.CALL_ACCEPTED) {
+        sendOffer();
+    } else {
+        let rejectionReason;
+        if (data.answer === PreOfferAnswers.CALL_NOT_AVAILABLE) {
+            rejectionReason = 'Callee is not able to pick up the call right now';
+        } else {
+            rejectionReason = 'Call rejected by the callee';
+        }
+        store.dispatch(setCallRejected({
+            rejected: true,
+            reason: rejectionReason
+        }));
+
+        resetCallData();
+    }
+};
+
+export const handleOffer = async (data) => {
+    await peerConnection.setRemoteDescription(data.offer);
+    const answer = await peerConnection.createAnswer();
+    await peerConnection.setLocalDescription(answer);
+    sendWebRTCAnswer({
+        callerSocketId: connectedUserSocketId,
+        answer: answer
+    });
+};
+
+export const handleAnswer = async (data) => {
+    await peerConnection.setRemoteDescription(data.answer);
+};
+
+export const handleCandidate = async (data) => {
+    try {
+        console.log('Adding ice candidates');
+        await peerConnection.addIceCandidate(data.candidate);
+    } catch (err) {
+        console.error('Error occured when trying to add received ice candidate', err);
+    }
+};
+
+export const handleUserHangedUp = () => {
+    resetCallDataAfterHangUp();
+};
+
+export const callToOtherUser = (calleeDetails) => {
+    connectedUserSocketId = calleeDetails.socketId;
+    store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
+    store.dispatch(setCallingDialogVisible(true));
+    sendPreOffer({
+        callee: calleeDetails,
+        caller: {
+            username: store.getState().dashboard.username
+        }
+    });
+};
+
+const checkIfCallIsPossible = () => {
+    const state = getState();
+    if (state.call.localStream === null || state.call.callState !== CallStates.CALL_AVAILABLE) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
+const sendOffer = async () => {
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    sendWebRTCOffer({
+        calleeSocketId: connectedUserSocketId,
+        offer: offer
+    });
+};
+
+const resetCallDataAfterHangUp = () => {
+    peerConnection.close();
+    peerConnection = null;
+    createPeerConnection();
+    resetCallData();
+    const state = getState();
+    const localStream = state.call.localStream;
+    localStream.getVideoTracks()[0].enabled = true;
+    localStream.getAudioTracks()[0].enabled = true;
+
+    if (state.call.screenSharingActive) {
+        screenSharingStream.getTracks().forEach(track => {
+            track.stop();
+        });
+    }
+
+    store.dispatch(resetCallDataState());
+};
+
+const resetCallData = () => {
+    connectedUserSocketId = null;
+    store.dispatch(setCallState(CallStates.CALL_AVAILABLE));
 };

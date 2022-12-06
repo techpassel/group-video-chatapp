@@ -1,5 +1,5 @@
 import { CallStates } from "../../enums"
-import { CALL_SET_CHAT_MESSAGE, SET_CALL_STATE, SET_LOCAL_STREAM, SET_REMOTE_STREAM } from "../constants/callConstant";
+import { SET_CHAT_MESSAGE, SET_CALL_STATE, SET_LOCAL_STREAM, SET_REMOTE_STREAM, SET_CALLING_DIALOG_VISIBLE, SET_SCREEN_SHARING_ACTIVE, RESET_CALL_DATA_STATE, SET_CALLER_USERNAME } from "../constants/callConstant";
 
 const initialState = {
     localStream: null,
@@ -8,7 +8,12 @@ const initialState = {
     message: {
         received: false,
         content: ''
-    }
+    },
+    callerUsername: '',
+    callingDialogVisible: false,
+    screenSharingActive: false,
+    localCameraEnabled: true,
+    localMicrophoneEnabled: true,
 }
 
 export const callReducer = (state = initialState, action) => {
@@ -28,10 +33,35 @@ export const callReducer = (state = initialState, action) => {
                 ...state,
                 remoteStream: action.payload
             }
-        case CALL_SET_CHAT_MESSAGE:
+        case SET_CHAT_MESSAGE:
             return {
                 ...state,
                 message: action.message
+            };
+        case SET_CALLER_USERNAME:
+            return {
+                ...state,
+                callerUsername: action.payload
+            }
+        case SET_CALLING_DIALOG_VISIBLE:
+            return {
+                ...state,
+                callingDialogVisible: action.payload
+            }
+        case SET_SCREEN_SHARING_ACTIVE:
+            return {
+                ...state,
+                screenSharingActive: action.payload
+            };
+        case RESET_CALL_DATA_STATE:
+            return {
+                ...state,
+                remoteStream: null,
+                screenSharingActive: false,
+                callerUsername: '',
+                localMicrophoneEnabled: true,
+                localCameraEnabled: true,
+                callingDialogVisible: false
             };
         default: return state;
     }

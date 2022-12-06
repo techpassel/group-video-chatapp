@@ -21,19 +21,20 @@ const allowCrossDomain = function (req, res, next) {
 //The express.json() function is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
 
 const server = http.createServer(app);
+/*
+Creating PeerServer(A server for PeerJS). Note that "PeerJs" is used in client side.
+PeerServer helps establishing connections between PeerJS clients. In PeerServer, data is not proxied through the server.
+const peerServer = ExpressPeerServer(server, {
+    debug: true,
+    path: ''
+});
 
-// Creating PeerServer(A server for PeerJS). Note that "PeerJs" is used in client side.
-// PeerServer helps establishing connections between PeerJS clients. In PeerServer, data is not proxied through the server.
-// const peerServer = ExpressPeerServer(server, {
-//     debug: true,
-//     path: ''
-// });
+app.use('/my-peer', peerServer);
+You can access PeerServer created above on the URL - http://localhost:5005/my-peer
 
-// app.use('/my-peer', peerServer);
-// You can access PeerServer created above on the URL - http://localhost:5005/my-peer
-
-// peerServer.on('connection', (client) => console.log(`Peer connection established for client - ${client}`));
-// peerServer.on('disconnect', (client) => onsole.log(`Peer connection ended for client - ${client}`));
+peerServer.on('connection', (client) => console.log(`Peer connection established for client - ${client}`));
+peerServer.on('disconnect', (client) => onsole.log(`Peer connection ended for client - ${client}`));
+*/
 
 // Creating a 'socket.io' server.
 // Here 'Server' is imported from 'socket.io' module and 'server' is defined above.
@@ -65,21 +66,64 @@ io.on('connection', (socket) => {
     socket.emit('connection', null);
 
     socket.on('register-user', (data) => {
-        const previousSocketId = data.previousSocketId;
-        delete data.previousSocketId;
-        
-        if (previousSocketId) {
-            peers = peers.filter(p => p.socketId != previousSocketId);
-        }
-        
         if (data.socketId && data.username && data.username != "") {
             // peers = peers.filter(p => p.username != data.username);
             peers.push(data);
-            notifyPeersAndRoomUpdate();
+            notifyPeersAndRoomsUpdate();
         }
     });
 
-    const notifyPeersAndRoomUpdate = () => {
+    socket.on('disconnect', () => {
+        console.log('User disconnected', socket.id);
+        peers = peers.filter(p => p.socketId != socket.id);
+        groupCallRooms = groupCallRooms.filter(room => room.socketId !== socket.id);
+        notifyPeersAndRoomsUpdate();
+    });
+
+    // listeners related with direct call
+    //====================================================================//
+    socket.on('pre-offer', (data) => {
+        console.log('pre-offer handled');
+        io.to(data.callee.socketId).emit('pre-offer', {
+            callerUsername: data.caller.username,
+            callerSocketId: socket.id
+        });
+    });
+
+    socket.on('pre-offer-answer', (data) => {
+        console.log('handling pre offer answer');
+        io.to(data.callerSocketId).emit('pre-offer-answer', {
+            answer: data.answer
+        });
+    });
+
+    socket.on('webRTC-offer', (data) => {
+        console.log('handling webRTC offer');
+        io.to(data.calleeSocketId).emit('webRTC-offer', {
+            offer: data.offer
+        });
+    });
+
+    socket.on('webRTC-answer', (data) => {
+        console.log('handling webRTC answer');
+        io.to(data.callerSocketId).emit('webRTC-answer', {
+            answer: data.answer
+        });
+    });
+
+    socket.on('webRTC-candidate', (data) => {
+        console.log('handling ice candidate');
+        io.to(data.connectedUserSocketId).emit('webRTC-candidate', {
+            candidate: data.candidate
+        });
+    });
+
+    socket.on('user-hanged-up', (data) => {
+        io.to(data.connectedUserSocketId).emit('user-hanged-up');
+    });
+    //====================================================================//
+
+    const notifyPeersAndRoomsUpdate = () => {
         //To send the user list of already existing users when he is registered. It includes him also.
         io.sockets.emit('broadcast', {
             event: BroadcastEventTypes.ACTIVE_USERS,
@@ -92,11 +136,6 @@ io.on('connection', (socket) => {
             groupCallRooms
         });
     }
-
-    socket.on('disconnect', () => {
-        console.log('User disconnected', socket.id);
-        peers = peers.filter(p => p.socketId != socket.id);
-    });
 })
 
 // Starting express server

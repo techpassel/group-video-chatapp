@@ -16,42 +16,22 @@ export const addUsername = (username) => async (dispatch, getState) => {
 };
 
 export const addSocketId = (socketId) => async (dispatch, getState) => {
-    try {
-        const { user: { userInfo } } = getState();
-        dispatch({ type: ADD_SOCKETID, payload: { ...userInfo, socketId } });
-    } catch (error) {
-        dispatch({ type: ADD_SOCKETID_ERROR, payload: { error } });
-    }
+    const { user: { userInfo } } = getState();
+    dispatch({ type: ADD_SOCKETID, payload: { ...userInfo, socketId } });
 };
 
 export const updateActiveUsers = (activeUsers) => async (dispatch, getState) => {
-    try {
-        dispatch({ type: UPDATE_ACTIVE_USERS, payload: activeUsers });
-    } catch (error) {
-        dispatch({ type: ACTIVE_USERS_ERROR, payload: error });
-    }
+    dispatch({ type: UPDATE_ACTIVE_USERS, payload: activeUsers });
 }
 
-export const clearActiveUsers = (activeUsers) => async (dispatch, getState) => {
-    try {
-        dispatch({ type: CLEAR_ACTIVE_USERS });
-    } catch (error) {
-        dispatch({ type: ACTIVE_USERS_ERROR, payload: error });
-    }
+export const clearActiveUsers = () => async (dispatch, getState) => {
+    dispatch({ type: CLEAR_ACTIVE_USERS });
 }
 
 export const updateGroupCallRooms = (groupCallRooms) => async (dispatch, getState) => {
-    try {
-        dispatch({ type: UPDATE_GROUP_CALL_ROOMS, payload: groupCallRooms });
-    } catch (error) {
-        dispatch({ type: GROUP_CALL_ROOMS_ERROR, payload: error });
-    }
+    dispatch({ type: UPDATE_GROUP_CALL_ROOMS, payload: groupCallRooms });
 }
 
-export const clearGroupCallRooms = (groupCallRooms) => async (dispatch, getState) => {
-    try {
-        dispatch({ type: CLEAR_GROUP_CALL_ROOMS });
-    } catch (error) {
-        dispatch({ type: GROUP_CALL_ROOMS_ERROR, payload: error });
-    }
+export const clearGroupCallRooms = () => async (dispatch, getState) => {
+    dispatch({ type: CLEAR_GROUP_CALL_ROOMS });
 }

@@ -10,3 +10,8 @@ export const PreOfferAnswers = {
     CALL_REJECTED: 'CALL_REJECTED',
     CALL_NOT_AVAILABLE: 'CALL_NOT_AVAILABLE'
 };
+
+export const BroadcastEventTypes = {
+    ACTIVE_USERS: 'ACTIVE_USERS',
+    GROUP_CALL_ROOMS: 'GROUP_CALL_ROOMS'
+};

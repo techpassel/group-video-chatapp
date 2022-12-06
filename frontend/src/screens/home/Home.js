@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useNavigation } from 'react-router-dom';
 import ActiveChatSection from '../../components/dashboard/active-chat-section/ActiveChatSection';

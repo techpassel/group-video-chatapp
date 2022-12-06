@@ -93,7 +93,6 @@ const handleBroadcastEvents = (data) => {
     switch (data.event) {
         case BroadcastEventTypes.ACTIVE_USERS:
             const activeUsers = data.activeUsers.filter(activeUser => activeUser.socketId !== socket.id);
-            console.log(activeUsers);
             store.dispatch(updateActiveUsers(activeUsers));
             break;
         case BroadcastEventTypes.GROUP_CALL_ROOMS:

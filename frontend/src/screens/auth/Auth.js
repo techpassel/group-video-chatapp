@@ -1,14 +1,19 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { FaHollyBerry } from 'react-icons/fa'
 import './Auth.scss'
 import { useNavigate } from "react-router-dom"
-import { SocketContext } from '../../contexts/SocketContext'
+import { useDispatch } from 'react-redux'
+import { addUsername } from '../../store/actions/userAction'
 
 const Auth = () => {
-    const { username, setUsername } = useContext(SocketContext);
+    const [username, setUsername] = useState('');
     const navigate = useNavigate();
-    const submitHandler = () => {
-        if (username !== "") {
+
+    const dispatch = useDispatch();
+    const submitHandler = (e) => {
+        e.preventDefault();
+        dispatch(addUsername(username));
+        if (username && username !== "") {
             navigate('/home');
         }
     }
@@ -20,7 +25,7 @@ const Auth = () => {
                     <FaHollyBerry className='icon' />
                     <span className='abc'>EnnaMeet</span>
                 </div>
-                <div className='inputWrapper'>
+                <form onSubmit={submitHandler} className='inputWrapper'>
                     <input
                         placeholder='Enter your name'
                         type='text'
@@ -28,8 +33,8 @@ const Auth = () => {
                         className="input"
                         onChange={(event) => setUsername(event.target.value)}
                     />
-                    <button onClick={submitHandler} className="startButton">Start</button>
-                </div>
+                    <button className="startButton">Start</button>
+                </form>
             </div>
         </div>
     )

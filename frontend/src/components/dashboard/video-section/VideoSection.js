@@ -1,8 +1,14 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
 
 const VideoSection = () => {
   return (
-    <div>VideoSection</div>
+    <div>
+      <div>
+        Video Player
+      </div>
+    </div>
   )
 }
 

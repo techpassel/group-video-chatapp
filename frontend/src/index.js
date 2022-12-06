@@ -7,17 +7,15 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './fonts/HyliaSerifBeta-Regular.otf';
 import './fonts/VeganStylePersonalUse-5Y58.ttf';
-import { SocketContextProvider } from './contexts/SocketContext';
-import { WebRTCContextProvider } from './contexts/WebRTCContext';
+import { Provider } from 'react-redux'
+import { store } from './store/store';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <SocketContextProvider>
-    <WebRTCContextProvider>
-      <App />
-    </WebRTCContextProvider>
-  </SocketContextProvider>
+  <Provider store={store}>
+    <App />
+  </Provider>
   // </React.StrictMode>
 );
 

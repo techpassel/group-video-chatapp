@@ -1,19 +1,49 @@
 import React, { useContext, useEffect } from 'react'
+import { useSelector } from 'react-redux';
+import { useNavigate, useNavigation } from 'react-router-dom';
 import ActiveChatSection from '../../components/dashboard/active-chat-section/ActiveChatSection';
 import ActiveUsersSection from '../../components/dashboard/active-users-section/ActiveUsersSection';
 import ChatGroupsSection from '../../components/dashboard/chat-groups-section/ChatGroupsSection';
 import VideoSection from '../../components/dashboard/video-section/VideoSection';
-import { SocketContext } from '../../contexts/SocketContext';
-import { WebRTCContext } from '../../contexts/WebRTCContext';
+import { connectWithWebSocket, disconnectUser } from '../../utils/SocketUtil';
+import { getLocalStream } from '../../utils/WebRCTUtil';
 import './Home.scss'
 
 const Home = () => {
-  const { username, setupSocketConnection } = useContext(SocketContext);
-  const { getLocalStream } = useContext(WebRTCContext);
+  const { userInfo: { username } } = useSelector((state) => state.user);
+
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // setupSocketConnection();
-    // getLocalStream();
+    if (!username || username === "") {
+      navigate('/')
+    }
+
+    connectWithWebSocket();
+    getLocalStream();
+
+    /*
+    //Call alertUser function as follows if you want to get confirmation before leaving page
+    window.addEventListener('beforeunload', alertUser)
+    return () => {
+      window.removeEventListener('beforeunload', alertUser)
+    }
+
+    const alertUser = e => {
+      e.preventDefault()
+      e.returnValue = ''
+    }
+  
+    //Call any function as follows if you want to call a function before leaving the page
+    return () => {
+      window.addEventListener('beforeunload', disconnectUser());
+    }*/
+    return () => {
+      window.addEventListener('beforeunload', disconnectUser());
+    }
   }, [])
+
+
 
   return (
     <div className='homeContainer'>

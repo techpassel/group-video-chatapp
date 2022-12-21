@@ -37,7 +37,8 @@ const Home = () => {
     //Call any function as follows if you want to call a function before leaving the page
     return () => {
       window.addEventListener('beforeunload', disconnectUser());
-    }*/
+    }
+    */
     return () => {
       window.addEventListener('beforeunload', disconnectUser());
     }

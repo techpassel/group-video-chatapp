@@ -57,11 +57,12 @@ peerServer.on('connection', (client) => console.log(`Peer connection established
 peerServer.on('disconnect', (client) => onsole.log(`Peer connection ended for client - ${client.id}`));
 
 /*
-Creating PeerServer(A server for PeerJS). Note that "PeerJs" is used in client side.
+Creating PeerServer(A server for "PeerJS"). Note that "PeerJs" is used in client side, on server side PeerServer is used.
 PeerServer helps establishing connections between PeerJS clients. In PeerServer, data is not proxied through the server.
+
 const peerServer = ExpressPeerServer(server, {
     debug: true,
-    path: ''
+    path: '/my-peer'
 });
 
 app.use('/my-peer', peerServer);

@@ -1,12 +1,14 @@
 import {
-    SET_CHAT_MESSAGE,
+    ADD_CHAT_MESSAGE,
     SET_CALL_STATE,
     SET_LOCAL_STREAM,
     SET_REMOTE_STREAM,
     SET_CALLER_USERNAME,
     SET_CALLING_DIALOG_VISIBLE,
     SET_SCREEN_SHARING_ACTIVE,
-    RESET_CALL_DATA_STATE
+    RESET_CALL_DATA_STATE,
+    SET_CALL_REJECTED,
+    CLEAR_CHAT_MESSAGES
 } from "../constants/callConstant"
 
 export const setLocalStream = (localStream) => (dispatch) => {
@@ -21,13 +23,19 @@ export const setRemoteStream = (remoteStream) => (dispatch) => {
     dispatch({ type: SET_REMOTE_STREAM, payload: remoteStream })
 }
 
-export const setMessage = (messageReceived, messageContent) => (dispatch) => {
+export const addMessage = (messageReceived, messageContent) => (dispatch) => {
     dispatch({
-        type: SET_CHAT_MESSAGE,
+        type: ADD_CHAT_MESSAGE,
         payload: {
             received: messageReceived,
             content: messageContent
         }
+    })
+}
+
+export const clearMessages = () => (dispatch) => {
+    dispatch({
+        type: CLEAR_CHAT_MESSAGES
     })
 }
 
@@ -56,3 +64,9 @@ export const resetCallDataState = () => (dispatch) => {
     dispatch({ type: RESET_CALL_DATA_STATE })
 }
 
+export const setCallRejected = (data) => (dispatch) => {
+    dispatch({
+        type: SET_CALL_REJECTED,
+        payload: data
+    })
+}

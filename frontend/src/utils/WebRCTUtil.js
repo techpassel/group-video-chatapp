@@ -1,5 +1,5 @@
 import { CallStates, PreOfferAnswers } from "../enums";
-import { resetCallDataState, setCallingDialogVisible, setCallState, setLocalStream, setMessage, setRemoteStream } from "../store/actions/callAction";
+import { resetCallDataState, setCallerUsername, setCallingDialogVisible, setCallRejected, setCallState, setLocalStream, addMessage, setRemoteStream } from "../store/actions/callAction";
 import { store } from "../store/store";
 import { sendPreOffer, sendPreOfferAnswer, sendWebRTCAnswer, sendWebRTCCandidate, sendWebRTCOffer } from './SocketUtil'
 
@@ -19,13 +19,18 @@ import { sendPreOffer, sendPreOfferAnswer, sendWebRTCAnswer, sendWebRTCCandidate
     For details about WebRTC check the following documentations :
     https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API
 
-
     For details about RTCPeerConnection check the following documentation :
     https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection
 
-
     For details about RTCDataChannel check the following documentation :
     https://developer.mozilla.org/en-US/docs/Web/API/RTCDataChannel
+
+    For details about MediaStream check the following documentation :
+    https://developer.mozilla.org/en-US/docs/Web/API/MediaStream
+
+    Few more important links :
+    https://webrtc.github.io/samples/src/content/peerconnection/trickle-ice/
+    https://datatracker.ietf.org/doc/html/draft-ietf-mmusic-trickle-ice
 */
 
 const defaultConstrains = {
@@ -54,6 +59,7 @@ const configuration = {
 let connectedUserSocketId;
 let peerConnection;
 let dataChannel;
+let screenSharingStream;
 
 const getState = () => store.getState();
 
@@ -77,10 +83,11 @@ const createPeerConnection = () => {
     const localStream = state.call.localStream;
 
     for (const track of localStream.getTracks()) {
+        console.log(track);
         peerConnection.addTrack(track, localStream);
     }
 
-    console.log(peerConnection.iceConnectionState);
+    console.log(peerConnection.canTrickleIceCandidates);
 
     peerConnection.ontrack = ({ streams: [stream] }) => {
         console.log(stream);
@@ -96,7 +103,7 @@ const createPeerConnection = () => {
         };
 
         incomingDataChannel.onmessage = (event) => {
-            store.dispatch(setMessage(true, event.data));
+            store.dispatch(addMessage(true, event.data));
         };
     };
 
@@ -176,7 +183,7 @@ export const handleAnswer = async (data) => {
 
 export const handleCandidate = async (data) => {
     try {
-        console.log('Adding ice candidates');
+        console.log('Adding ice candidates', data.candidate);
         await peerConnection.addIceCandidate(data.candidate);
     } catch (err) {
         console.error('Error occured when trying to add received ice candidate', err);

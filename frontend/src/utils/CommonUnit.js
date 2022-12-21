@@ -16,3 +16,7 @@ export const dateInFormat = (date) => {
     }
     return additionalInfo ? additionalInfo + " " + time : time;
 }
+
+export const capitalizeFirstLetter = (string) => {
+    return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+}

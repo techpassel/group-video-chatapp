@@ -4,6 +4,7 @@ import './Auth.scss'
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from 'react-redux'
 import { addUsername } from '../../store/actions/userAction'
+import { capitalizeFirstLetter } from '../../utils/CommonUnit'
 
 const Auth = () => {
     const [username, setUsername] = useState('');
@@ -31,7 +32,7 @@ const Auth = () => {
                         type='text'
                         value={username}
                         className="input"
-                        onChange={(event) => setUsername(event.target.value)}
+                        onChange={(event) => setUsername(capitalizeFirstLetter(event.target.value))}
                     />
                     <button className="startButton">Start</button>
                 </form>

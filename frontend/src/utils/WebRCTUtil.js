@@ -167,6 +167,24 @@ export const handlePreOfferAnswer = (data) => {
     }
 };
 
+export const acceptIncomingCallRequest = () => {
+    sendPreOfferAnswer({
+        callerSocketId: connectedUserSocketId,
+        answer: PreOfferAnswers.CALL_ACCEPTED
+    });
+
+    store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
+};
+
+export const rejectIncomingCallRequest = () => {
+    sendPreOfferAnswer({
+        callerSocketId: connectedUserSocketId,
+        answer: PreOfferAnswers.CALL_REJECTED
+    });
+    resetCallData();
+};
+
+
 export const handleOffer = async (data) => {
     await peerConnection.setRemoteDescription(data.offer);
     const answer = await peerConnection.createAnswer();
@@ -198,10 +216,12 @@ export const callToOtherUser = (calleeDetails) => {
     connectedUserSocketId = calleeDetails.socketId;
     store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
     store.dispatch(setCallingDialogVisible(true));
+    let { userInfo: { username } } = getState().user
+    console.log(username);
     sendPreOffer({
         callee: calleeDetails,
         caller: {
-            username: store.getState().dashboard.username
+            username
         }
     });
 };

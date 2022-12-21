@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IoPersonCircle } from "react-icons/io5";
-import { dateInFormat } from '../../../utils/CommonUnit';
+import { dateInFormat } from '../../utils/CommonUnit'
 import './ActiveChatSection.scss';
 
 const messages = [

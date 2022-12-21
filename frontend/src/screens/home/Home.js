@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useNavigation } from 'react-router-dom';
-import ActiveChatSection from '../../components/dashboard/active-chat-section/ActiveChatSection';
-import ActiveUsersSection from '../../components/dashboard/active-users-section/ActiveUsersSection';
-import ChatGroupsSection from '../../components/dashboard/chat-groups-section/ChatGroupsSection';
-import VideoSection from '../../components/dashboard/video-section/VideoSection';
+import ActiveChatSection from '../../components/active-chat-section/ActiveChatSection';
+import ActiveUsersSection from '../../components/active-users-section/ActiveUsersSection';
+import ChatGroupsSection from '../../components/chat-groups-section/ChatGroupsSection';
+import VideoSection from '../../components/video-section/VideoSection';
 import { connectWithWebSocket, disconnectUser } from '../../utils/SocketUtil';
 import { getLocalStream } from '../../utils/WebRCTUtil';
 import './Home.scss'

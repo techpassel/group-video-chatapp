@@ -8,7 +8,8 @@ export const CallStates = {
 export const PreOfferAnswers = {
     CALL_ACCEPTED: 'CALL_ACCEPTED',
     CALL_REJECTED: 'CALL_REJECTED',
-    CALL_NOT_AVAILABLE: 'CALL_NOT_AVAILABLE'
+    CALL_NOT_AVAILABLE: 'CALL_NOT_AVAILABLE',
+    CALL_NOT_ANSWERED: 'CALL_NOT_ANSWERED'
 };
 
 export const BroadcastEventTypes = {

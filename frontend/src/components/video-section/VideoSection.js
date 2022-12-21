@@ -21,7 +21,11 @@ const VideoSection = () => {
   return (
     <div className='videoSectionContainer'>
       <LocalVideoView />
-      {callState !== CallStates.CALL_IN_PROGRESS && <DashboardInfo />}
+      {callState === CallStates.CALL_IN_PROGRESS ?
+        <div className='videoSectionLogo'>EnnaMeet</div>
+        :
+        <DashboardInfo />
+      }
       {callState === CallStates.CALL_REQUESTED && <IncomingCallDialog callerUsername={callerUsername} />}
     </div>
   )

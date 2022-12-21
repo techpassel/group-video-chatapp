@@ -184,6 +184,14 @@ export const rejectIncomingCallRequest = () => {
     resetCallData();
 };
 
+export const incomingCallRequestNotAnswered = () => {
+    sendPreOfferAnswer({
+        callerSocketId: connectedUserSocketId,
+        answer: PreOfferAnswers.CALL_NOT_ANSWERED
+    });
+    resetCallData();
+};
+
 
 export const handleOffer = async (data) => {
     await peerConnection.setRemoteDescription(data.offer);

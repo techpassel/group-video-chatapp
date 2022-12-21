@@ -10,7 +10,7 @@ const DashboardInfo = () => {
                 Hello <span className='dashboardUsername'>{username}</span>, welcome to <span className='dashboardLogo'>EnnaMeet</span>.
             </span>
             <span className='dashboardInfoDescription'>
-                You can start calling directy to a person from the list or
+                You can start calling directly to a person from the list or
                 you can create or join group call.
             </span>
         </div>

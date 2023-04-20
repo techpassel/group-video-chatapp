@@ -1,5 +1,5 @@
 import { CallStates } from "../../enums"
-import { ADD_CHAT_MESSAGE, SET_CALL_STATE, SET_LOCAL_STREAM, SET_REMOTE_STREAM, SET_CALLING_DIALOG_VISIBLE, SET_SCREEN_SHARING_ACTIVE, RESET_CALL_DATA_STATE, SET_CALLER_USERNAME, SET_CALL_REJECTED } from "../constants/callConstant";
+import { ADD_CHAT_MESSAGE, SET_CALL_STATE, SET_LOCAL_STREAM, SET_REMOTE_STREAM, SET_CALLING_DIALOG_VISIBLE, SET_SCREEN_SHARING_ACTIVE, RESET_CALL_DATA_STATE, SET_CALLER_USERNAME, SET_CALL_REJECTED, SET_CALLEE_USERNAME } from "../constants/callConstant";
 
 const initialState = {
     localStream: null,
@@ -7,6 +7,7 @@ const initialState = {
     callState: CallStates.CALL_UNAVAILABLE,
     messages: [],
     callerUsername: '',
+    calleeUsername: '',
     callingDialogVisible: false,
     screenSharingActive: false,
     localCameraEnabled: true,
@@ -44,6 +45,11 @@ export const callReducer = (state = initialState, action) => {
                 ...state,
                 callerUsername: action.payload
             }
+        case SET_CALLEE_USERNAME:
+            return {
+                ...state,
+                calleeUsername: action.payload
+            }
         case SET_CALLING_DIALOG_VISIBLE:
             return {
                 ...state,
@@ -57,6 +63,7 @@ export const callReducer = (state = initialState, action) => {
         case RESET_CALL_DATA_STATE:
             return {
                 ...state,
+                callState: CallStates.CALL_AVAILABLE,
                 remoteStream: null,
                 screenSharingActive: false,
                 callerUsername: '',

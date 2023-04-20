@@ -39,7 +39,7 @@ const IncomingCallDialog = ({ callerUsername }) => {
     return (
         <div className='incomingCallDialogContainer'>
             <div className='incomingCallTitle'>Incoming Call</div>
-            <div className='incomingCallerName'>{callerUsername} is calling </div>
+            <div className='incomingCallerName'>{callerUsername} is calling. </div>
             <div className='trippleDot'>{str}</div>
             <div className='incomingCallButtonsContainer'>
                 <button className='callAcceptBtn' onClick={handleAcceptButtonPressed}>

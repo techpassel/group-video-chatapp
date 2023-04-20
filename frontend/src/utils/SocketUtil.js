@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { BroadcastEventTypes } from "../enums";
 import { addSocketId, updateActiveUsers, updateGroupCallRooms } from "../store/actions/userAction";
 import { store } from '../store/store'
-import { handleAnswer, handleCandidate, handleOffer, handlePreOffer, handlePreOfferAnswer, handleUserHangedUp } from "./WebRCTUtil";
+import { handleAnswer, handleCandidate, handleDisconnectCall, handleOffer, handlePreOffer, handlePreOfferAnswer, handleUserHangedUp } from "./WebRCTUtil";
 
 const SERVER_URL = 'http://localhost:5000'
 
@@ -22,7 +22,7 @@ export const connectWithWebSocket = () => {
         handleBroadcastEvents(data);
     });
 
-    // listeners related with direct call
+    // listeners from server related with direct call
     //===================================================//
     socket.on('pre-offer', (data) => {
         handlePreOffer(data);
@@ -31,6 +31,10 @@ export const connectWithWebSocket = () => {
     socket.on('pre-offer-answer', (data) => {
         handlePreOfferAnswer(data);
     });
+
+    socket.on('disconnect-call', (data) => {
+        handleDisconnectCall(data);
+    })
 
     socket.on('webRTC-offer', (data) => {
         handleOffer(data);
@@ -83,6 +87,10 @@ export const sendWebRTCAnswer = (data) => {
 export const sendWebRTCCandidate = (data) => {
     socket.emit('webRTC-candidate', data);
 };
+
+export const disconnectCall = (data) => {
+    socket.emit('disconnect-call', data);
+}
 
 export const sendUserHangedUp = (data) => {
     socket.emit('user-hanged-up', data);

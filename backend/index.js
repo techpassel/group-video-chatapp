@@ -133,6 +133,13 @@ io.on('connection', (socket) => {
         });
     });
 
+    socket.on('disconnect-call', (data) => {
+        console.log('handling call disconnection');
+        io.to(data.otherUserSocketId).emit('disconnect-call', {
+            otherUserSocketId: socket.id
+        })
+    })
+
     socket.on('webRTC-offer', (data) => {
         console.log('handling webRTC offer');
         io.to(data.calleeSocketId).emit('webRTC-offer', {

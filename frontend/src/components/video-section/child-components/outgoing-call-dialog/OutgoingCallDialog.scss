@@ -1,4 +1,4 @@
-.incomingCallDialogContainer {
+.outgoingCallDialogContainer {
     margin: auto;
     position: absolute;
     top: 0;
@@ -16,39 +16,22 @@
     box-shadow: 0px 0px 8px 1px rgba(1, 1, 1, 0.7);
 }
 
-.incomingCallTitle {
+.outgoingCallTitle {
     text-align: center;
     font-size: 26px;
 }
 
-.incomingCallerName {
+.outgoingCallerName {
     text-align: center;
     font-size: 20px;
     color: black;
 }
 
-.incomingCallButtonsContainer {
+.outgoingCallButtonsContainer {
     padding-top: 20px;
     display: flex;
     justify-content: center;
     gap: 25px;
-}
-
-.callAcceptBtn {
-    padding: 8px 20px;
-    border-radius: 20px;
-    background-color: #20ad00;
-    color: white;
-    font-size: 18px;
-    font-weight: 500;
-    border: none;
-    -webkit-box-shadow: 0px 0px 8px 1px rgba(32, 173, 0, 0.5);
-    -moz-box-shadow: 0px 0px 8px 1px rgba(32, 173, 0, 0.5);
-    box-shadow: 0px 0px 8px 1px rgba(32, 173, 0, 0.5);
-
-    &:hover {
-        background-color: #188000;
-    }
 }
 
 .callRejectBtn {

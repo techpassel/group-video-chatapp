@@ -1,7 +1,7 @@
 import { CallStates, PreOfferAnswers } from "../enums";
-import { resetCallDataState, setCallerUsername, setCallingDialogVisible, setCallRejected, setCallState, setLocalStream, addMessage, setRemoteStream } from "../store/actions/callAction";
+import { resetCallDataState, setCallerUsername, setCallingDialogVisible, setCallRejected, setCallState, setLocalStream, addMessage, setRemoteStream, setCalleeUsername } from "../store/actions/callAction";
 import { store } from "../store/store";
-import { sendPreOffer, sendPreOfferAnswer, sendWebRTCAnswer, sendWebRTCCandidate, sendWebRTCOffer } from './SocketUtil'
+import { disconnectCall, sendPreOffer, sendPreOfferAnswer, sendUserHangedUp, sendWebRTCAnswer, sendWebRTCCandidate, sendWebRTCOffer } from './SocketUtil'
 
 /*
     Role of STUN and TURN servers in WebRTC :-
@@ -138,6 +138,15 @@ export const handlePreOffer = (data) => {
         connectedUserSocketId = data.callerSocketId;
         store.dispatch(setCallerUsername(data.callerUsername));
         store.dispatch(setCallState(CallStates.CALL_REQUESTED));
+        /*
+            It will make sure 'incoming call dialog' popup opens on th browser and from there we can either accept, 
+            reject or don't answer the call. And accordingly acceptIncomingCallRequest, rejectIncomingCallRequest or 
+            incomingCallRequestNotAnswered function will be called and from these functions we will call 
+            "sendPreOfferAnswer" function with appropriate reason. So that's the reason we are not calling 
+            "sendPreOfferAnswer" function from this "if" block, but we are calling "sendPreOfferAnswer" function from the
+            else block as in case of else block, 'incoming call dialog' popup won't be open and hence we need to call 
+            "sendPreOfferAnswer" function with appropriate reason from the else bloc itself.  
+        */
     } else {
         sendPreOfferAnswer({
             callerSocketId: data.callerSocketId,
@@ -152,11 +161,14 @@ export const handlePreOfferAnswer = (data) => {
     if (data.answer === PreOfferAnswers.CALL_ACCEPTED) {
         sendOffer();
     } else {
+        let { calleeUsername } = getState().call
         let rejectionReason;
         if (data.answer === PreOfferAnswers.CALL_NOT_AVAILABLE) {
-            rejectionReason = 'Callee is not able to pick up the call right now';
+            rejectionReason = calleeUsername + ' is not available to pick up the call right now.';
+        } else if (data.answer == PreOfferAnswers.CALL_NOT_ANSWERED) {
+            rejectionReason = calleeUsername + " didn't picked up your call, Please try after sometime."
         } else {
-            rejectionReason = 'Call rejected by the callee';
+            rejectionReason = 'Call is rejected by ' + calleeUsername + ".";
         }
         store.dispatch(setCallRejected({
             rejected: true,
@@ -166,6 +178,13 @@ export const handlePreOfferAnswer = (data) => {
         resetCallData();
     }
 };
+
+export const handleDisconnectCall = (data) => {
+    let { callState } = getState().call
+    if ((callState == CallStates.CALL_IN_PROGRESS || callState == CallStates.CALL_REQUESTED) && connectedUserSocketId == data.otherUserSocketId) {
+        resetCallData();
+    }
+}
 
 export const acceptIncomingCallRequest = () => {
     sendPreOfferAnswer({
@@ -191,6 +210,13 @@ export const incomingCallRequestNotAnswered = () => {
     });
     resetCallData();
 };
+
+export const cancelOutgoingCallRequest = () => {
+    disconnectCall({
+        otherUserSocketId: connectedUserSocketId
+    });
+    resetCallData();
+}
 
 
 export const handleOffer = async (data) => {
@@ -220,12 +246,24 @@ export const handleUserHangedUp = () => {
     resetCallDataAfterHangUp();
 };
 
+export const hangupOngoingCall = () => {
+    sendUserHangedUp({ connectedUserSocketId });
+    resetCallDataAfterHangUp();
+}
+
+export const resetRejectReason = () => {
+    store.dispatch(setCallRejected({
+        reject: false,
+        reason: ''
+    }));
+}
+
 export const callToOtherUser = (calleeDetails) => {
     connectedUserSocketId = calleeDetails.socketId;
     store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
     store.dispatch(setCallingDialogVisible(true));
+    store.dispatch(setCalleeUsername(calleeDetails.username));
     let { userInfo: { username } } = getState().user
-    console.log(username);
     sendPreOffer({
         callee: calleeDetails,
         caller: {
@@ -256,7 +294,6 @@ const resetCallDataAfterHangUp = () => {
     peerConnection.close();
     peerConnection = null;
     createPeerConnection();
-    resetCallData();
     const state = getState();
     const localStream = state.call.localStream;
     localStream.getVideoTracks()[0].enabled = true;
@@ -268,10 +305,10 @@ const resetCallDataAfterHangUp = () => {
         });
     }
 
-    store.dispatch(resetCallDataState());
+    resetCallData();
 };
 
 const resetCallData = () => {
     connectedUserSocketId = null;
-    store.dispatch(setCallState(CallStates.CALL_AVAILABLE));
+    store.dispatch(resetCallDataState());
 };

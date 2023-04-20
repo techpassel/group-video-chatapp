@@ -8,7 +8,8 @@ import {
     SET_SCREEN_SHARING_ACTIVE,
     RESET_CALL_DATA_STATE,
     SET_CALL_REJECTED,
-    CLEAR_CHAT_MESSAGES
+    CLEAR_CHAT_MESSAGES,
+    SET_CALLEE_USERNAME
 } from "../constants/callConstant"
 
 export const setLocalStream = (localStream) => (dispatch) => {
@@ -43,6 +44,13 @@ export const setCallerUsername = (callerUsername) => (dispatch) => {
     dispatch({
         type: SET_CALLER_USERNAME,
         payload: callerUsername
+    })
+}
+
+export const setCalleeUsername = (calleeUsername) => (dispatch) => {
+    dispatch({
+        type: SET_CALLEE_USERNAME,
+        payload: calleeUsername
     })
 }
 

@@ -34,9 +34,11 @@ const ActiveUsersSection = () => {
                                 <span>{user.username}</span>
                             </div>
                             <FaVideo className='callAvailableIcon' onClick={() => handleListItemPressed(user)} />
-                            {/* {active && (
+                            {/* 
+                            {active && (
                                 <FaCheck className='activeUserCheck' />
-                            )} */}
+                            )} 
+                            */}
                         </div>
                     ))
                 }

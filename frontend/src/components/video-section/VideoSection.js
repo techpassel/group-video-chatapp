@@ -23,7 +23,7 @@ const VideoSection = () => {
 
   return (
     <div className='videoSectionContainer'>
-      <LocalVideoView localStream={localStream} />
+      <LocalVideoView localStream={localStream} remoteStream={remoteStream} />
       {remoteStream && callState === CallStates.CALL_IN_PROGRESS ?
         <RemoteVideoView remoteStream={remoteStream} />
         :

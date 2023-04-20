@@ -5,7 +5,7 @@ import { hangupOngoingCall } from '../../../../utils/WebRCTUtil';
 
 const RemoteVideoView = ({ remoteStream }) => {
     // const { remoteStream } = useSelector((state) => state.call);
-    const [mute, setMute] = useState(true);
+    const [mute, setMute] = useState(false);
     const remoteVideoRef = useRef();
 
     useEffect(() => {

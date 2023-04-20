@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import './LocalVideoView.scss'
 
-const LocalVideoView = ({ localStream }) => {
+const LocalVideoView = ({ localStream, remoteStream }) => {
     // const { localStream } = useSelector((state) => state.call)
     const [mute, setMute] = useState(true);
     const localVideoRef = useRef();
@@ -21,6 +21,14 @@ const LocalVideoView = ({ localStream }) => {
     const handleMuteBtn = () => {
         setMute(!mute);
     }
+
+    useEffect(() => {
+        if (remoteStream) {
+            setMute(false)
+        } else {
+            setMute(true)
+        }
+    }, [remoteStream])
 
     return (
         <div className="localVideoContainer">

@@ -199,7 +199,6 @@ export const acceptIncomingCallRequest = () => {
         callerSocketId: connectedUserSocketId,
         answer: PreOfferAnswers.CALL_ACCEPTED
     });
-
     store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
 };
 

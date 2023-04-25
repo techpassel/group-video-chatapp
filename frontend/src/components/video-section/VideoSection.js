@@ -31,7 +31,7 @@ const VideoSection = () => {
           <DashboardInfo />
         </>
       }
-      {callState === CallStates.CALL_REQUESTED && <IncomingCallDialog callerUsername={callerUsername} />}
+      {callState === CallStates.CALL_REQUESTED && <IncomingCallDialog callerUsername={callerUsername} callState={callState} />}
       {(callingDialogVisible || callRejected.rejected) && <OutgoingCallDialog calleeUsername={calleeUsername} callRejected={callRejected} />}
     </div>
   )

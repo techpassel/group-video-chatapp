@@ -83,14 +83,12 @@ const createPeerConnection = () => {
     const localStream = state.call.localStream;
 
     for (const track of localStream.getTracks()) {
-        console.log(track);
         peerConnection.addTrack(track, localStream);
     }
 
-    console.log(peerConnection.canTrickleIceCandidates);
+    console.log("peerConnection.canTrickleIceCandidates", peerConnection.canTrickleIceCandidates);
 
     peerConnection.ontrack = ({ streams: [stream] }) => {
-        console.log(stream);
         store.dispatch(setRemoteStream(stream));
     };
 
@@ -116,6 +114,14 @@ const createPeerConnection = () => {
     };
 
     peerConnection.onicecandidate = (event) => {
+        //Step 1 - Ice candidate. Step 2 is "sendWebRTCCandidate" in SocketUtil.js.
+        /*
+            An icecandidate event is sent to an RTCPeerConnection when an RTCIceCandidate has been identified and added to the local peer by a call to 
+            RTCPeerConnection.setLocalDescription(). The event handler should transmit the candidate to the remote peer over the signaling channel so 
+            the remote peer can add it to its set of remote candidates.
+            So It will be called when we set LocalDescription for caller and callee. For caller we are calling "setLocalDescription" in "sendOffer" function 
+            in WebRTCUtil.js file while for callee we are calling "setLocalDescription" in "handleOffer" function in WebRTCUtil.js file.
+        */
         console.log('Geeting candidates from stun server', event.candidate);
         if (event.candidate) {
             sendWebRTCCandidate({
@@ -134,6 +140,7 @@ const createPeerConnection = () => {
 };
 
 export const handlePreOffer = (data) => {
+    //Step 2 of receiving call. Step 3 is "sendPreOfferAnswer" defined in SocketUtil.js.
     if (checkIfCallIsPossible()) {
         connectedUserSocketId = data.callerSocketId;
         store.dispatch(setCallerUsername(data.callerUsername));
@@ -156,6 +163,7 @@ export const handlePreOffer = (data) => {
 };
 
 export const handlePreOfferAnswer = (data) => {
+    //Step 5 of making call. Step 6 is "sendOffer" defined in WebRCTUtil.js.
     store.dispatch(setCallingDialogVisible(false));
 
     if (data.answer === PreOfferAnswers.CALL_ACCEPTED) {
@@ -220,6 +228,8 @@ export const cancelOutgoingCallRequest = () => {
 
 
 export const handleOffer = async (data) => {
+    //Step 5 of receiving call. Step 6 is "sendWebRTCAnswer" defined in SocketUtil.js.
+    //From this step "peerConnection.onicecandidate" will also be triggered as we are calling "setLocalDescription".
     await peerConnection.setRemoteDescription(data.offer);
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
@@ -230,12 +240,14 @@ export const handleOffer = async (data) => {
 };
 
 export const handleAnswer = async (data) => {
+    //Step 9 of making call. This is the last step in making call. After this only iceCandidate and stun server will work.
+    //Check "peerConnection.onicecandidate" in WebRTCUtil.js for details.
     await peerConnection.setRemoteDescription(data.answer);
 };
 
 export const handleCandidate = async (data) => {
+    //Step 2 - Receive Ice candidate
     try {
-        console.log('Adding ice candidates', data.candidate);
         await peerConnection.addIceCandidate(data.candidate);
     } catch (err) {
         console.error('Error occured when trying to add received ice candidate', err);
@@ -259,6 +271,7 @@ export const resetRejectReason = () => {
 }
 
 export const callToOtherUser = (calleeDetails) => {
+    //Step 2 of making call. Step 3 is "sendPreOffer" defined in SocketUtil.js
     connectedUserSocketId = calleeDetails.socketId;
     store.dispatch(setCallState(CallStates.CALL_IN_PROGRESS));
     store.dispatch(setCallingDialogVisible(true));
@@ -282,6 +295,8 @@ const checkIfCallIsPossible = () => {
 };
 
 const sendOffer = async () => {
+    //Step 6 of making call. Step 7 is "sendWebRTCOffer" defined in SocketUtil.js.
+    //From this step "peerConnection.onicecandidate" will also be triggered as we are calling "setLocalDescription".
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     sendWebRTCOffer({

@@ -25,10 +25,12 @@ export const connectWithWebSocket = () => {
     // listeners from server related with direct call
     //===================================================//
     socket.on('pre-offer', (data) => {
+        //Step 1 of receiving call. Step 2 is "handlePreOffer" defined in WebRCTUtil.js.
         handlePreOffer(data);
     });
 
     socket.on('pre-offer-answer', (data) => {
+        //Step 4 of making call. Step 5 is "handlePreOfferAnswer" defined in WebRCTUtil.js.
         handlePreOfferAnswer(data);
     });
 
@@ -37,14 +39,17 @@ export const connectWithWebSocket = () => {
     })
 
     socket.on('webRTC-offer', (data) => {
+        //Step 4 of receiving call. Step 5 is "handleOffer" defined in WebRCTUtil.js.
         handleOffer(data);
     });
 
     socket.on('webRTC-answer', (data) => {
+        //Step 8 of making call. Step 9 is "handleAnswer" defined in WebRCTUtil.js.
         handleAnswer(data);
     });
 
     socket.on('webRTC-candidate', (data) => {
+        //Step 1 - Receive Ice candidate
         handleCandidate(data);
     });
 
@@ -69,22 +74,33 @@ export const disconnectUser = () => {
 // emitting events to server related with direct call
 //===================================================//
 export const sendPreOffer = (data) => {
+    //Step 3 of making call. Step 4 is "socket.on('pre-offer-answer')" defined in SocketUtil.js.
+    //After this step request is emitted on server(backend) and hence on callee side frontend.  
     socket.emit('pre-offer', data);
 };
 
 export const sendPreOfferAnswer = (data) => {
+    //Step 3 of receiving call. Step 4 is "socket.on('webRTC-offer')" in SocketUtil.js.
+    //After this step request is emitted on server(backend) and hence on caller side frontend.
     socket.emit('pre-offer-answer', data);
 };
 
 export const sendWebRTCOffer = (data) => {
+    //Step 7 of making call. Step 8 is "socket.on('webRTC-answer')" in SocketUtil.js.
+    //After this step request is emitted on server(backend) and hence on callee side frontend.
     socket.emit('webRTC-offer', data);
 };
 
 export const sendWebRTCAnswer = (data) => {
+    //Step 6 of receiving call. 
+    //After this step request is emitted on server(backend) and hence on caller side frontend.
+    //This is the last step in making call. After this only iceCandidate and stun server will work.
+    //Check "peerConnection.onicecandidate" in WebRTCUtil.js for details.
     socket.emit('webRTC-answer', data);
 };
 
 export const sendWebRTCCandidate = (data) => {
+    //Step 2 - Ice candidate. 
     socket.emit('webRTC-candidate', data);
 };
 

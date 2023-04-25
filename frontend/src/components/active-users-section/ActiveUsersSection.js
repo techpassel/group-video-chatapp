@@ -14,6 +14,7 @@ const ActiveUsersSection = () => {
     const { callState } = useSelector((state) => state.call)
 
     const handleListItemPressed = (activeUser) => {
+        //Step 1 of making call. Step 2 is "callToOtherUser" defined in WebRCTUtil.js
         if (callState === CallStates.CALL_AVAILABLE) {
             callToOtherUser(activeUser);
         }
